@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:math_memory/src/data/model/memory_card.dart';
 
+/// A widget that represents a memory card tile.
 class CardTile extends StatelessWidget {
   final MemoryCard card;
   final VoidCallback onTap;

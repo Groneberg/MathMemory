@@ -1,5 +1,6 @@
 import 'dart:math';
 
+/// A class representing a mathematical equation with two terms and an operator.
 class Equation {
   final int id;
   late int term1;
@@ -11,6 +12,7 @@ class Equation {
     _generateEquation();
   }
 
+  /// Generates a random equation and calculates the result.
   void _generateEquation() {
     final random = Random();
     final operators = ['+', '-', 'x', '÷'];

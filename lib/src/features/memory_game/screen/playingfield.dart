@@ -5,6 +5,7 @@ import 'package:math_memory/src/data/model/equation.dart';
 import 'package:math_memory/src/data/model/memory_card.dart';
 import 'package:math_memory/src/features/memory_game/widgets/card_tile.dart';
 
+/// The main playing field screen for the memory game.
 class Playingfield extends StatefulWidget {
   const Playingfield({super.key});
 
@@ -13,8 +14,7 @@ class Playingfield extends StatefulWidget {
 }
 
 class _PlayingfieldState extends State<Playingfield> {
-  
-  List<MemoryCard> cards = []; 
+  List<MemoryCard> cards = [];
   List<Equation> equationList = [];
   int tryCounter = 0;
   int matchCounter = 0;
@@ -26,46 +26,46 @@ class _PlayingfieldState extends State<Playingfield> {
     _setupGame();
   }
 
+  /// Sets up a new game by generating equations and creating memory cards.
   void _setupGame() {
     List<Equation> newEquationList = [];
     equationList = List.generate(8, (i) => Equation(i));
     Set<int> checkResultSet = {};
 
     while (newEquationList.length < 8) {
-    Equation eq = Equation(newEquationList.length);
+      Equation eq = Equation(newEquationList.length);
 
-    if (!checkResultSet.contains(eq.result)) {
-      log("Generated Equation: ${eq.equationString} = ${eq.result}");
-      checkResultSet.add(eq.result);
+      if (!checkResultSet.contains(eq.result)) {
+        log("Generated Equation: ${eq.equationString} = ${eq.result}");
+        checkResultSet.add(eq.result);
 
-      newEquationList.add(eq);
+        newEquationList.add(eq);
+      }
     }
-  }
 
     List<MemoryCard> tempCards = [];
     for (int i = 0; i < 8; i++) {
-      
-      tempCards.add(MemoryCard(
-        content: equationList[i].equationString,
-        pairId: i,
-      ));
+      tempCards.add(
+        MemoryCard(content: equationList[i].equationString, pairId: i),
+      );
 
-      tempCards.add(MemoryCard(
-        content: equationList[i].result.toString(),
-        pairId: i,
-      ));
+      tempCards.add(
+        MemoryCard(content: equationList[i].result.toString(), pairId: i),
+      );
     }
 
     tempCards.shuffle();
-    
+
     setState(() {
       cards = tempCards;
     });
   }
 
+  /// Handles the tap event on a card.
   void _handleCardTap(int index) {
-    
-    if (cards[index].isMatched || cards[index].isFlipped || flippedIndices.length >= 2) {
+    if (cards[index].isMatched ||
+        cards[index].isFlipped ||
+        flippedIndices.length >= 2) {
       return;
     }
 
@@ -79,9 +79,10 @@ class _PlayingfieldState extends State<Playingfield> {
     }
   }
 
+  /// Checks if the two flipped cards match.
   void _checkMatch() {
     tryCounter++;
-    
+
     int firstIndex = flippedIndices[0];
     int secondIndex = flippedIndices[1];
 
@@ -92,12 +93,11 @@ class _PlayingfieldState extends State<Playingfield> {
         matchCounter++;
         flippedIndices.clear();
       });
-      
+
       if (matchCounter == 8) _showWinDialog();
     } else {
       Timer(const Duration(seconds: 2), () {
-        
-        if (!mounted) return; 
+        if (!mounted) return;
 
         setState(() {
           cards[firstIndex].isFlipped = false;
@@ -108,6 +108,7 @@ class _PlayingfieldState extends State<Playingfield> {
     }
   }
 
+  /// Displays a dialog when the player wins the game.
   void _showWinDialog() {
     showDialog(
       context: context,
@@ -115,16 +116,19 @@ class _PlayingfieldState extends State<Playingfield> {
         title: const Text("Gewonnen!"),
         content: Text("Versuche: $tryCounter"),
         actions: [
-          TextButton(onPressed: () {
-            Navigator.pop(context);
-            
-            setState(() {
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+
+              setState(() {
                 tryCounter = 0;
                 matchCounter = 0;
                 flippedIndices.clear();
                 _setupGame();
-            });
-          }, child: const Text("Neues Spiel"))
+              });
+            },
+            child: const Text("Neues Spiel"),
+          ),
         ],
       ),
     );
@@ -150,7 +154,7 @@ class _PlayingfieldState extends State<Playingfield> {
           itemCount: cards.length,
           itemBuilder: (context, index) {
             return CardTile(
-              card: cards[index], 
+              card: cards[index],
               onTap: () => _handleCardTap(index),
             );
           },

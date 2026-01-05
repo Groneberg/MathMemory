@@ -1,3 +1,4 @@
+/// A class representing a memory card in the game.
 class MemoryCard {
   final String content; 
   final int pairId;
