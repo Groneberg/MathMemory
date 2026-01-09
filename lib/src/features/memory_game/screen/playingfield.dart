@@ -139,6 +139,30 @@ class _PlayingfieldState extends State<Playingfield> {
     );
   }
 
+  Widget _buildDifficultyButton(String label, Difficulty difficulty, Color color) {
+    bool isSelected = currentDifficulty == difficulty;
+    
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: isSelected ? color : Colors.grey[300],
+        foregroundColor: isSelected ? Colors.white : Colors.black54,
+        elevation: isSelected ? 5 : 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+      onPressed: () {
+        setState(() {
+          currentDifficulty = difficulty;
+          tryCounter = 0;
+          matchCounter = 0;
+          flippedIndices.clear();
+          _setupGame(); // Restart the game with new difficulty
+        });
+      },
+      child: Text(label),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,23 +172,42 @@ class _PlayingfieldState extends State<Playingfield> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
+      body: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                ),
+                itemCount: cards.length,
+                itemBuilder: (context, index) {
+                  return CardTile(
+                    card: cards[index],
+                    onTap: () => _handleCardTap(index),
+                  );
+                },
+              ),
+            ),
           ),
-          itemCount: cards.length,
-          itemBuilder: (context, index) {
-            return CardTile(
-              card: cards[index],
-              onTap: () => _handleCardTap(index),
-            );
-          },
-        ),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            color: Colors.black12,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildDifficultyButton("Easy", Difficulty.easy, Colors.green),
+                _buildDifficultyButton("Medium", Difficulty.medium, Colors.orange),
+                _buildDifficultyButton("Hard", Difficulty.hard, Colors.red),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+

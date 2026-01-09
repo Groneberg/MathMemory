@@ -33,7 +33,7 @@ Die aktuelle Version befindet sich in der funktionalen Prototypen-Phase. Folgend
 * **Animationen:** Einführung von komplexeren Flip-Animationen und Partikeleffekten bei Treffern.
 
 ### Phase 2: Erweiterte Features
-* **Schwierigkeitsgrade:** Einstellbare Zahlenräume (z. B. 0-10, 0-100) und Auswahl spezifischer Operatoren.
+* **Rechnungsoptionen:**  Auswahl spezifischer Operatoren.
 * **Highscore-System:** Lokale Speicherung der besten Zeiten und geringsten Versuchsanzahlen.
 * **Audio-Feedback:** Integration von Soundeffekten für Klicks, Treffer und Spielabschluss.
 
