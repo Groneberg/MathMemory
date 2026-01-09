@@ -20,6 +20,9 @@ class _PlayingfieldState extends State<Playingfield> {
   int matchCounter = 0;
   List<int> flippedIndices = [];
 
+  /// Current difficulty level of the game. standart is medium
+  Difficulty currentDifficulty = Difficulty.medium;
+
   @override
   void initState() {
     super.initState();
@@ -29,11 +32,11 @@ class _PlayingfieldState extends State<Playingfield> {
   /// Sets up a new game by generating equations and creating memory cards.
   void _setupGame() {
     List<Equation> newEquationList = [];
-    equationList = List.generate(8, (i) => Equation(i));
+
     Set<int> checkResultSet = {};
 
     while (newEquationList.length < 8) {
-      Equation eq = Equation(newEquationList.length);
+      Equation eq = Equation(newEquationList.length, currentDifficulty);
 
       if (!checkResultSet.contains(eq.result)) {
         log("Generated Equation: ${eq.equationString} = ${eq.result}");
@@ -42,6 +45,8 @@ class _PlayingfieldState extends State<Playingfield> {
         newEquationList.add(eq);
       }
     }
+
+    equationList = newEquationList;
 
     List<MemoryCard> tempCards = [];
     for (int i = 0; i < 8; i++) {
